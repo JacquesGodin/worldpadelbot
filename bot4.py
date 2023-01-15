@@ -18,8 +18,6 @@ job = updater.job_queue
 
 
 def weekly_draft(context):  # task that returns the list of drafted players
-    # context.bot.send_message(chat_id=context.job.context,
-    #                         text='Players drafted for upcoming week are:\n')
     context.bot.send_message(chat_id=variables.chatid,
                              text='Players drafted for upcoming week are:\n')
     match = padeldraft.draft()
@@ -90,11 +88,11 @@ def draft_list(update: Update, context: CallbackContext):
         update.message.reply_text(text="Draft list is still empty")
     else:
         # context.bot.send_message(
-        #    chat_id=variables.bottoken, text="the enrolled players for the coming week are:")
+        #    chat_id=variables.chatid, text="the enrolled players for the coming week are:")
         update.message.reply_text(
             text="the enrolled players for the coming week are:")
         for item in draftlist:
-            # context.bot.send_message(chat_id="-1001748512374", text=item)
+            # context.bot.send_message(chat_id=variables.chatid, text=item)
             update.message.reply_text(text=item)
 
 
