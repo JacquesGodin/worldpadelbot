@@ -1,5 +1,5 @@
 # worldpadelbot
-A simple bot to draft players for the next padel match
+A simple Telegram bot to draft players for the next padel match
 
 Users can interact with three commands:
 
