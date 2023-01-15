@@ -1,14 +1,11 @@
-# Online Python compiler (interpreter) to run Python online.
-# Write Python 3 code in this online editor and run it.
-
 from datetime import datetime
 import random
 
 dayofweek = datetime.now().weekday()
 
 
-def draft():  # função para fazer o sorteio. Deve ser chamada à quarta-feira às 20h
-    players = open("list.txt").readlines()
+def draft():  # function to randomly pick 4 players from the list of players
+    players = open("list_players.txt").readlines()
     random.shuffle(players)
     player_1 = players.pop()
     random.shuffle(players)
@@ -18,58 +15,53 @@ def draft():  # função para fazer o sorteio. Deve ser chamada à quarta-feira 
     random.shuffle(players)
     player_4 = players.pop()
 
-    print("\nplayers for upcoming game are:")
-    print(player_1+"\n", player_2+"\n", player_3+"\n", player_4+"\n")
+    match = [player_1, player_2, player_3, player_4]
+    return (match)
 
 
-def salutation():
-    return ("Hi welcome!")
-
-
-def draftlist_reseter():  # função para apagar toda a informação do ficheiro de suporte, para o novo sorteio. Deve ser chamada no mesmo dia que o sorteio, depois às 21h
-    with open("list.txt", "r+") as draftlist:
+def draftlist_reseter():  # erases all the entries in the list_players.txt
+    with open("list_players.txt", "r+") as draftlist:
         draftlist.truncate(0)  # need '0' when using r+
 
 
-# função que verifica se o jogador já se inscreveu e o adiciona à lista caso ainda não o tenha feito. Só pode estar aberto entre segunda e quarta-feira
-def draftlist_verifier(player):
-    with open('list.txt', "r+") as draftlist:
+def subscriberslist_reseter():  # erases all the entries in the list_subscribers.txt
+    with open("list_subscribers.txt", "r+") as subscriberslist:
+        subscriberslist.truncate(0)  # need '0' when using r+
+
+
+def draftlist_verifier(player):  # verifies and adds a new player to the draft list
+    with open('list_players.txt', "r+") as draftlist:
         if player in draftlist.read():
-            # if player in players:
             print("name already listed")
             return False
-        elif player == "erase":
-            draftlist_reseter()
         else:
             draftlist.write(player + "\n")
             return True
 
 
-def timeframe_verifier():
-   # aqui especificamos que a inscrição só pode ser feita até quarta-feira (dia 2 da semana)
-    if 2 <= dayofweek <= 3 and datetime.now().hour < 20:
-        # Proposta é abrir inscrições entre 4ª (dia 2) e 5ª (dia 3)
-        for x in range(0, 6):
-            player = input("Enter your name for the draft:")
-            return player
-            draftlist_verifier(player)
+# verifies and adds a new subscriber to the list, to prevent the same telegram user_id to subscribe more than one time per week
+def subscriberid_verifier(subscriber):
+    str_subscriber = str(subscriber)
+    with open('list_subscribers.txt', "r+") as subscriberlist:
+        if str_subscriber in subscriberlist.read():
+            return False
+        else:
+            subscriberlist.write(str_subscriber + "\n")
+            return True
+
+
+def players_list():
+    with open('list_players.txt', "r") as playerlist:
+        lines = [line.rstrip() for line in playerlist]
+    return lines
+
+
+def timeframe_verifier_2():  # Sets and verifies if the subscription window is still open
+    if 2 <= dayofweek <= 6:  # and datetime.now().hour < 20: # between monday and wednesday
+        return True
     else:
-        print("draft already ended")
-        return ("draft already ended")
-
-    if dayofweek == 3 and datetime.now().hour == 20:
-        draft()
-
-
-def timeframe_verifier_2():
-   # aqui especificamos que a inscrição só pode ser feita até quarta-feira (dia 2 da semana)
-    if 2 <= dayofweek <= 4 and datetime.now().hour < 20:
-        # Proposta é abrir inscrições entre 4ª (dia 2) e 5ª (dia 3)
-        return (True)
-    else:
-        print("draft already ended")
-        return (False)
+        return False
 
 
 if __name__ == '__main__':
-    timeframe_verifier()
+    timeframe_verifier_2()
