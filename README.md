@@ -13,4 +13,6 @@ When a user types a name after using the /enroll command, the user's answer will
 
 jobDay and weekly_draft functions set the weekly draft at a specific date and time (given by function t) and post the result to a specific channel. After the draft, all lists will be erased through draftlist_reseter() and subscriberlist_reseter()
 
+Future work:
 
+- Add a control for when there are not enough players to make a game. As of today, it is returning an error as the players.pop function gives an error if it is out of lines
