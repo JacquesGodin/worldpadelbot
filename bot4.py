@@ -6,10 +6,11 @@ from telegram.ext.messagehandler import MessageHandler
 from telegram.ext.filters import Filters
 
 
+import variables
 import padeldraft
 from datetime import time
 
-updater = Updater("5920011320:AAEyf6TWMbP3F8SCcMIJZq53vuhuDHZ6Lus",
+updater = Updater(variables.bottoken,
                   use_context=True)
 
 
@@ -19,19 +20,19 @@ job = updater.job_queue
 def weekly_draft(context):  # task that returns the list of drafted players
     # context.bot.send_message(chat_id=context.job.context,
     #                         text='Players drafted for upcoming week are:\n')
-    context.bot.send_message(chat_id="-1001748512374",
+    context.bot.send_message(chat_id=variables.chatid,
                              text='Players drafted for upcoming week are:\n')
     match = padeldraft.draft()
     for x in range(0, 4):
         context.bot.send_message(chat_id=context.job.context, text=match[x])
-        context.bot.send_message(chat_id="-1001748512374", text=match[x])
+        context.bot.send_message(chat_id=variables.chatid, text=match[x])
     # after picking the players, deletes the list_players' entries
     padeldraft.draftlist_reseter()
     # after picking the players, deletes the list_subscribers entries
     padeldraft.subscriberslist_reseter()
 
 
-t = time(22, 2, 00, 000000)  # sets the time when the draft is going to occur
+t = time(0, 18, 00, 000000)  # sets the time when the draft is going to occur
 status = False
 
 
@@ -86,12 +87,10 @@ def draft_list(update: Update, context: CallbackContext):
     draftlist = padeldraft.players_list()
     print(draftlist)
     if draftlist == []:
-        # context.bot.send_message(
-        #    chat_id="-1001748512374", text="Draft list is still empty")
         update.message.reply_text(text="Draft list is still empty")
     else:
         # context.bot.send_message(
-        #    chat_id="-1001748512374", text="the enrolled players for the coming week are:")
+        #    chat_id=variables.bottoken, text="the enrolled players for the coming week are:")
         update.message.reply_text(
             text="the enrolled players for the coming week are:")
         for item in draftlist:
